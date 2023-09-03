@@ -117,6 +117,7 @@ async fn post(client: Client, args: &Post) -> Result<()> {
 // 打印服务器版本号 + 状态码
 fn print_status(resp: &Response) {
     let status = format!("{:?} {}", resp.version(), resp.status()).blue();
+
     println!("{}\n", status);
 }
 
@@ -135,6 +136,9 @@ fn print_body(m: Option<Mime>, body: &str) {
         // 对于 "application/json" 我们 pretty print
         Some(v) if v == mime::APPLICATION_JSON => print_syntect(body, "json"),
         Some(v) if v == mime::TEXT_HTML => print_syntect(body, "html"),
+        Some(v) if v == mime::TEXT_HTML_UTF_8 || v == mime::TEXT_HTML => {
+            print_syntect(body, "html")
+        }
 
         // 其它 mime type，我们就直接输出
         _ => println!("{}", body),
@@ -147,7 +151,9 @@ async fn print_resp(resp: Response) -> Result<()> {
     print_headers(&resp);
     let mime = get_content_type(&resp);
     let body = resp.text().await?;
+
     print_body(mime, &body);
+
     Ok(())
 }
 
