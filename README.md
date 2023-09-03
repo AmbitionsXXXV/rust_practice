@@ -9,3 +9,16 @@ cargo run -p pi_prev
 ```shell
 cargo run -p simple_http_cli -- --url <a real website url>
 ```
+
+## [rust_httpie](https://github.com/AmbitionsXXXV/rust_practice/tree/main/rust_httpie)
+
+```shell
+cargo run -p rust_httpie -- <http method(only support get&post)> <url>
+
+# or
+
+cargo build -p rust_httpie --release
+
+cd target/release/rust_httpie
+./rust_httpie <http method(only support get&post)> <url>
+```
