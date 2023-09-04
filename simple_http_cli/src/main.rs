@@ -5,47 +5,47 @@ use std::error::Error;
 
 #[derive(Parser)]
 #[command(
-    author = "Et cetera",
-    version,
-    about = "Sends HTTP requests and prints detailed information"
+  author = "Et cetera",
+  version,
+  about = "Sends HTTP requests and prints detailed information"
 )]
 struct Cli {
-    #[arg(short, long, help = "Target URL", required = true)]
-    url: String,
+  #[arg(short, long, help = "Target URL", required = true)]
+  url: String,
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
-    let cli = Cli::parse();
+  let cli = Cli::parse();
 
-    let response = send_request(&cli.url)?;
+  let response = send_request(&cli.url)?;
 
-    print_response_details(response)?;
+  print_response_details(response)?;
 
-    Ok(())
+  Ok(())
 }
 
 /// 发起一个 HTTP 请求
 fn send_request(url: &str) -> Result<reqwest::blocking::Response, Box<dyn Error>> {
-    let client = Client::builder().build()?;
-    let response = client.get(url).send()?;
+  let client = Client::builder().build()?;
+  let response = client.get(url).send()?;
 
-    Ok(response)
+  Ok(response)
 }
 
 /// 打印 HTTP 响应的详细信息
 fn print_response_details(response: reqwest::blocking::Response) -> Result<(), Box<dyn Error>> {
-    println!("Status: {}", response.status());
-    println!("Headers:\n{:#?}", response.headers());
-    print_headers(response.headers());
+  println!("Status: {}", response.status());
+  println!("Headers:\n{:#?}", response.headers());
+  print_headers(response.headers());
 
-    let body = response.text()?;
-    println!("Body:\n{}", body);
+  let body = response.text()?;
+  println!("Body:\n{}", body);
 
-    Ok(())
+  Ok(())
 }
 
 fn print_headers(headers: &HeaderMap) {
-    for (key, value) in headers.iter() {
-        println!("{}: {}", key, value.to_str().unwrap_or("[unprintable]"));
-    }
+  for (key, value) in headers.iter() {
+    println!("{}: {}", key, value.to_str().unwrap_or("[unprintable]"));
+  }
 }
